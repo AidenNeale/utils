@@ -1,0 +1,4 @@
+save_directory: "/home/ash/sheffield_experiments_02_Apr_2025/" # this is where the map is saved
+image_topic: "/camera/color/image_raw"  # Assumes compressed image
+bag_root_folder: "/home/ash/sheffield_experiments_02_Apr_2025/"  # This folder has several .db3 files
+fps: 10
