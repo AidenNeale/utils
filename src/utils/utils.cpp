@@ -20,6 +20,8 @@ namespace utils
     {
         makeDirectory(params_.save_directory_);
         mls_cloud_ = std::make_shared<pcl::PointCloud<pcl::PointXYZI>>();
+        j_ = 1;
+        i_ = 1;
     }
 
     void Utils::makeDirectory(const std::string &directory)
@@ -185,7 +187,9 @@ namespace utils
 
     void Utils::savePointcloud(const pcl::PointCloud<pcl::PointXYZI> &cloud)
     {
-        std::string save_name = params_.save_directory_ + "pcd_map_" + std::to_string(i_) + ".pcd";
+        std::ostringstream ss;
+        ss << std::setw(5) << std::setfill('0') << i_;
+        std::string save_name = params_.save_directory_ + "pcd_map_" + ss.str() + ".pcd";
         if (!cloud.empty())
         {
             writer_.writeBinary(save_name, cloud);
@@ -197,7 +201,9 @@ namespace utils
     void Utils::savePointcloud(const pcl::PointCloud<pcl::PointXYZI> &cloud, const std::string &save_directory)
     {
         makeDirectory(save_directory);
-        std::string save_name = save_directory + "reg_pcds_" + std::to_string(j_) + ".pcd";
+        std::ostringstream ss;
+        ss << std::setw(5) << std::setfill('0') << j_;
+        std::string save_name = save_directory + "reg_pcds_" + ss.str() + ".pcd";
         if (!cloud.empty())
         {
             writer_.writeBinary(save_name, cloud);
