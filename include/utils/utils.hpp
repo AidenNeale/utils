@@ -23,6 +23,7 @@
 #include <vector>
 #include <iomanip>  // for std::setw and std::setfill
 #include <sstream>
+#include <regex>
 
 namespace utils
 {
@@ -95,6 +96,12 @@ namespace utils
 
 		geometry_msgs::msg::TransformStamped eulerToQuaternions(const double xyz[3]);
 		geometry_msgs::msg::TransformStamped eulerToQuaternions(const std::vector<double> xyz);
+
+		std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> loadPCDs(const std::string &folder_path);
+
+		std::vector<std::string> getPcdPath(const std::string &folder_path);
+
+        void saveTrajectory(const std::vector<std::vector<double>> &curve, const std::string &filename);
 
 	protected:
 		UtilParams params_;

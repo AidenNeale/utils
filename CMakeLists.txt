@@ -28,13 +28,20 @@ ament_target_dependencies(utils
   "laser_geometry"
   "pcl_ros"
 )
-install(TARGETS
-  utils
-  DESTINATION lib/${PROJECT_NAME}
+target_include_directories(utils PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+install(DIRECTORY include/
+  DESTINATION include/
 )
 #########
 add_library(ros2bag_reader SHARED 
   src/utils/ros2bag_reader.cpp
+)
+target_include_directories(ros2bag_reader PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 ament_target_dependencies(ros2bag_reader
   "rclcpp"
@@ -42,9 +49,13 @@ ament_target_dependencies(ros2bag_reader
   "sensor_msgs"
   "rosbag2_transport"
 )
-install(TARGETS
-  ros2bag_reader
-  DESTINATION lib/${PROJECT_NAME}
+install(
+  TARGETS 
+    utils
+    ros2bag_reader
+  EXPORT utils               
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
 )
 #########
 add_executable(rosbag_to_video 
@@ -103,4 +114,6 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+ament_export_targets(utils HAS_LIBRARY_TARGET)
+ament_export_include_directories(include)
 ament_package()

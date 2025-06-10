@@ -5,7 +5,6 @@ namespace fs = std::filesystem;
 
 namespace utils
 {
-
     Utils::Utils() : params_(UtilParams())
     {
         initialize();
@@ -291,5 +290,99 @@ namespace utils
             rot[i] = xyz[i];
         }
         return eulerToQuaternions(rot);
+    }
+
+    std::vector<std::string> Utils::getPcdPath(const std::string &folder_path)
+    {
+        std::vector<std::string> pcd_paths;
+
+        for (const auto &entry : fs::directory_iterator(folder_path))
+        {
+            if (entry.path().extension() == ".pcd")
+            {
+                pcd_paths.push_back(entry.path().string());
+            }
+        }
+        // Define a custom comparator for sorting based on filenames
+        auto naturalSortComparator = [](const std::string &a, const std::string &b)
+        {
+            std::regex re("\\d+");
+            std::smatch matchA, matchB;
+
+            // Extract filenames
+            std::string filenameA = fs::path(a).filename().string();
+            std::string filenameB = fs::path(b).filename().string();
+
+            // Find the first numeric part in each filename
+            std::regex_search(filenameA, matchA, re);
+            std::regex_search(filenameB, matchB, re);
+
+            // If both filenames have numeric parts, compare them numerically
+            if (!matchA.empty() && !matchB.empty())
+            {
+                int numA = std::stoi(matchA.str());
+                int numB = std::stoi(matchB.str());
+                if (numA != numB)
+                    return numA < numB;
+            }
+
+            // Fallback to lexicographical comparison if numbers are the same or absent
+            return filenameA < filenameB;
+        };
+
+        std::sort(pcd_paths.begin(), pcd_paths.end(), naturalSortComparator);
+        return pcd_paths;
+    }
+
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> Utils::loadPCDs(const std::string &folder_path)
+    {
+        int i = 0;
+        std::vector<std::string> pcd_paths = getPcdPath(folder_path);
+        std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> pointClouds;
+
+        for (const auto &p : pcd_paths)
+        {
+            pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>());
+            if (pcl::io::loadPCDFile<pcl::PointXYZI>(p, *cloud) == -1)
+            {
+                std::cerr << "Couldn't read file " << p << std::endl;
+                continue;
+            }
+            pointClouds.push_back(cloud);
+            ++i;
+        }
+        std::cout << "Loaded " << i << " pcd files" << std::endl;
+        return pointClouds;
+    }
+
+    void Utils::saveTrajectory(const std::vector<std::vector<double>> &curve, const std::string &filename)
+    {
+        // Open the file in write mode
+        std::ofstream outfile(filename);
+
+        // Check if the file is open
+        if (outfile.is_open())
+        {
+            // Loop through the 2D vector and write each element to the file
+            for (const auto &row : curve)
+            {
+                for (size_t i = 0; i < row.size(); ++i)
+                {
+                    outfile << row[i];
+                    if (i < row.size() - 1)
+                    {
+                        outfile << ","; // Add a comma between elements
+                    }
+                }
+                outfile << "\n"; // Newline after each row
+            }
+            // Close the file
+            outfile.close();
+            std::cout << "Data successfully written to " << filename << std::endl;
+        }
+        else
+        {
+            std::cerr << "Error: Could not open the file " << filename << std::endl;
+        }
     }
 }
