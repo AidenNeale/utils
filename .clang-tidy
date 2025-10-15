@@ -1,0 +1,58 @@
+Checks: >
+  readability-identifier-naming,
+  google-readability-naming
+
+# Only check headers in the project, not system headers
+HeaderFilterRegex: '^(?!.*/usr/).*'
+
+CheckOptions:
+  # Typedefs = CamelCase
+  - key: readability-identifier-naming.TypedefCase
+    value: CamelCase
+
+  # Parameter = lower_case
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+
+  # Local variable = lower_case
+  - key: readability-identifier-naming.LocalVariableCase
+    value: lower_case
+
+  # Type aliases = CamelCase
+  - key: readability-identifier-naming.TypeAliasCase
+    value: CamelCase
+
+  # Classes = CamelCase
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  
+  # Functions = camelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  
+  # Variables = snake_case
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  
+  # Member variables should have trailing underscore
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: '_'
+  
+  # Constants = UPPER_CASE
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  
+  # For some reason some typedefs such as pcl::...::Ptr identify as needing  
+  # to be lower_case. This ignores this specific case
+  # Allow certain patterns to be ignored
+  - key: readability-identifier-naming.TypedefIgnoredRegexp
+    value: '^(Ptr|xyz)$'
+  
+  - key: readability-identifier-naming.ParameterIgnoredRegexp
+    value: '^(Ptr|xyz)$'
+  
+  - key: readability-identifier-naming.ConstantIgnoredRegexp
+    value: '^(Ptr|xyz)$'
+  
+  - key: readability-identifier-naming.VariableIgnoredRegexp
+    value: '^(Ptr|xyz)$'

@@ -1,0 +1,70 @@
+---
+# Use "LLVM" or "Google" as a base and then override
+BasedOnStyle: Google
+
+# Language-specific settings (optional)
+Language: Cpp
+
+# Indentation style
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# Line length
+ColumnLimit: 100
+
+# Continuation indent (for broken lines)
+ContinuationIndentWidth: 4
+
+# Spacing & braces
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+BreakBeforeBraces: Attach
+
+# Wrapping & breaks
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 100
+PenaltyReturnTypeOnItsOwnLine: 60
+
+# Pointer & reference binding
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+# Spaces
+SpaceBeforeParens: ControlStatements  # for `if (`, `for (`, etc.
+SpaceAfterCStyleCast: true
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+# Alignments
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: true
+
+# Include formatting
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^".*"'
+    Priority: 1
+    SortPriority: 1
+  - Regex: '^<[^.]*>$'
+    Priority: 2
+    SortPriority: 2
+  - Regex: '^<.*\.hpp>'
+    Priority: 3
+    SortPriority: 3
+  - Regex: '^<.*>'
+    Priority: 4
+    SortPriority: 4
+
+# Others
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortEnumsOnASingleLine: false
+
+# Prevent extra blank lines after includes (optional tuning)
+MaxEmptyLinesToKeep: 1
